@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/denyago/simple_http_monitor.png?branch=master)](https://travis-ci.org/denyago/simple_http_monitor)
+
 # Simple HTTP Monitor
 
 Script for monitoring website uptime status.
