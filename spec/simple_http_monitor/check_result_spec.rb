@@ -33,7 +33,36 @@ describe SimpleHttpMonitor::CheckResult do
   end
 
   describe '.inspect' do
+    let(:uri)        { 'http://example.com' }
 
+    context 'success' do
+      let(:status)     { '300' }
+      let(:failed_try) { nil }
+      let(:timeout)    { nil }
+
+      it { expect(subject.inspect).to eq("CheckResult: http://example.com status: 300") }
+    end
+    context 'status code failure' do
+      let(:status)     { '500' }
+      let(:failed_try) { nil }
+      let(:timeout)    { nil }
+
+      it { expect(subject.inspect).to eq("CheckResult: http://example.com status: 500 fail: http_code_error try: 0") }
+    end
+    context 'timeout failure' do
+      let(:status)     { '500' }
+      let(:failed_try) { nil }
+      let(:timeout)    { 100 }
+
+      it { expect(subject.inspect).to eq("CheckResult: http://example.com status: 500 timeout: 100 fail: connection_timeout_error try: 0") }
+    end
+    context 'with failed try' do
+      let(:status)     { '500' }
+      let(:failed_try) { 13 }
+      let(:timeout)    { nil }
+
+      it { expect(subject.inspect).to eq("CheckResult: http://example.com status: 500 fail: http_code_error try: 13") }
+    end
   end
 
   describe '.result' do

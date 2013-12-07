@@ -6,7 +6,13 @@ module SimpleHttpMonitor
     FAIL_CODES = 400..599
 
     def inspect
-      "CheckResult: #{uri} status: #{status}"
+      "CheckResult: #{uri} status: #{status}".tap do |str|
+        if failed?
+          str << " timeout: #{timeout}" if result == :connection_timeout_error
+          str << " fail: #{result}"
+          str << " try: #{failed_try.to_i}"
+        end
+      end
     end
 
     def failed?
