@@ -3,7 +3,7 @@
 Script for monitoring website uptime status.
 
 It should alerts via e-mail when the site has been down for configured number of consecutive tries.
-Send up notification once the site comes up again. The notification contains the reason of the last error.
+Sends up notification once the site comes up again. The notification contains the reason of the last error.
 
 What does it mean "site is down?".
 - incorrect HTTP response code
@@ -25,4 +25,5 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Simply run `simple_http_monitor` with `--help` argument to see available options.
+For example of configuration file, see `examples/config.yml`

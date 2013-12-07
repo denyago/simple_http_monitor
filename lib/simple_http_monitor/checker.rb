@@ -2,7 +2,15 @@ require 'net/http'
 require 'uri'
 
 module SimpleHttpMonitor
+  ##
+  # Class: Checker
+  #
+  # Does actual HTTP checks.
   class Checker
+
+    # Checks site url over HTTP
+    #
+    # Retirns {Hash} with check results. Including :url, :timeout, :status
     def check
       uri     = URI.parse(url)
       request = Net::HTTP::Get.new(uri)
@@ -23,6 +31,11 @@ module SimpleHttpMonitor
 
     attr_reader :url, :timeout
 
+    # Initializes new instance
+    #
+    # Params:
+    #   - url {String} to check
+    #   - timeout {Integer} of HTTP request in seconds
     def initialize(url, timeout)
       @url     = url
       @timeout = timeout

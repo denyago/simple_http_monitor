@@ -1,7 +1,14 @@
 require 'mail'
 
 module SimpleHttpMonitor
+  ##
+  # Class: Mailer
+  #
+  # For sending email messages, related to results
+  # of HTTP checks
   class Mailer
+
+    # Templates of emails
     TEMPLATES = {
       failure: "Technical information:
   resaon of failure: {error_type};
@@ -12,6 +19,10 @@ module SimpleHttpMonitor
   HTTP code: {http_code}."
     }
 
+    # Sends mail about HTTP check failure
+    #
+    # Params:
+    #   - check_result {CheckResult} with result of HTTP check
     def send_failure_notification(check_result)
       deliver_message do |mail|
         mail.subject = "[HTTP Checker] Error on #{check_result.uri}"
@@ -19,6 +30,10 @@ module SimpleHttpMonitor
       end
     end
 
+    # Sends mail about HTTP check success, if site had failed checks
+    #
+    # Params:
+    #   - check_result {CheckResult} with result of HTTP check
     def send_back_online_notification(check_result)
       deliver_message do |mail|
         mail.subject = "[HTTP Checker] Successfully back online #{check_result.uri}"
@@ -49,6 +64,15 @@ module SimpleHttpMonitor
       end
     end
 
+    # Initializes new instance
+    #
+    # Params:
+    #   - settings {Hash} of settings:
+    #     - :from {Staring} email address to send mail from
+    #     - :to   {String} email address to send mail to
+    #     - :smtp_host {String} SMTP server hostname
+    #     - :smtp_user {String} user account on SMTP server
+    #     - :smtp_paswd {String} password for SMTP server
     def initialize(settings={})
       @from       = settings[:from]
       @to         = settings[:to]

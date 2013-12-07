@@ -1,3 +1,8 @@
+##
+# Module: SimpleHttpMonitor
+#
+# Provides namespace for this gem.
+# Use Monitor class for checking.
 module SimpleHttpMonitor
 end
 
