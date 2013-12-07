@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/denyago/simple_http_monitor.png?branch=master)](https://travis-ci.org/denyago/simple_http_monitor)
+[![Code Climate](https://codeclimate.com/github/denyago/simple_http_monitor.png)](https://codeclimate.com/github/denyago/simple_http_monitor)
 
 # Simple HTTP Monitor
 
