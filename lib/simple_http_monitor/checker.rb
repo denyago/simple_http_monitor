@@ -3,7 +3,7 @@ require 'uri'
 
 module SimpleHttpMonitor
   class Checker
-    def self.check(url, timeout)
+    def check
       uri     = URI.parse(url)
       request = Net::HTTP::Get.new(uri)
 
@@ -13,10 +13,19 @@ module SimpleHttpMonitor
           http.request(request)
         end
       rescue Timeout::Error
-        return CheckResult.new(uri: url, timeout: timeout)
+        return {uri: url, timeout: timeout}
       end
 
-      CheckResult.new(uri: url, status: result.code)
+      {uri: url, status: result.code}
+    end
+
+    private
+
+    attr_reader :url, :timeout
+
+    def initialize(url, timeout)
+      @url     = url
+      @timeout = timeout
     end
   end
 end

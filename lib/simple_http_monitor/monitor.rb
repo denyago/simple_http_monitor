@@ -3,11 +3,11 @@ require 'logger'
 module SimpleHttpMonitor
   class Monitor
 
-    attr_reader :configuration, :logger
+    attr_reader :logger, :store, :notifier, :checker
 
     def check
       last_result = store.load(CheckResult) || CheckResult.new
-      result = Checker.check(configuration.url, configuration.timeout)
+      result      = CheckResult.new(checker.check)
 
       if result.failed?
         result.failed_try = last_result.failed_try.to_i + 1
@@ -16,19 +16,18 @@ module SimpleHttpMonitor
       logger.info result
       store.save  result
 
-      Notifier.notify(previous: last_result, current: result,
-                      tries: configuration.tries
-                     )
+      notifier.notify(previous: last_result, current: result)
     end
 
     private
 
-    attr_reader :store
-
     def initialize(config={})
-      @configuration = Configuration.new(config[:email], config[:url], config[:tries], config[:timeout])
       @logger        = Logger.new(STDOUT)
       @store         = Store.new(config[:work_dir])
+      mailer         = Mailer.new(from: config[:from_email], to: config[:ops_email], smtp_host: config[:smtp_host],
+                                  smtp_user: config[:smtp_user], smtp_paswd: config[:smtp_paswd])
+      @notifier      = Notifier.new(mailer, config[:tries])
+      @checker       = Checker.new(config[:url], config[:timeout])
     end
   end
 end
