@@ -8,8 +8,14 @@ describe SimpleHttpMonitor::Checker do
   describe 'checks response time' do
     it 'by specifying timeout' do
       Net::HTTP.any_instance.should_receive(:request).and_raise(Timeout::Error)
-      result = subject.check
+    end
 
+    it 'by specifying timeout' do
+      Net::HTTP.should_receive(:start).and_raise(Errno::ECONNREFUSED)
+    end
+
+    after do
+      result = subject.check
       expect(result[:timeout]).to eq(2)
     end
   end

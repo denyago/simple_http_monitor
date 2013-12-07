@@ -20,7 +20,7 @@ module SimpleHttpMonitor
           http.read_timeout = timeout
           http.request(request)
         end
-      rescue Timeout::Error
+      rescue Timeout::Error, Errno::ECONNREFUSED
         return {uri: url, timeout: timeout}
       end
 
