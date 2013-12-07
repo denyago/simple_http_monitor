@@ -11,12 +11,19 @@ module SimpleHttpMonitor
       if previous.failed_try.to_i < current.failed_try.to_i
         Mailer.send_failure_notification if tries.include?(current.failed_try)
       end
+
+      if previous.failed? && !current.failed?
+        Mailer.send_back_online_notification if tries.min <= previous.failed_try
+      end
     end
   end
 
   class Mailer
     def self.send_failure_notification
-      puts 'TODO: Fire email!'
+      puts 'TODO: Fire failure email!'
+    end
+    def self.send_back_online_notification
+      puts 'TODO: Fire back online email!'
     end
   end
 end

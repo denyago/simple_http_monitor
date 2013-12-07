@@ -60,8 +60,35 @@ describe SimpleHttpMonitor::Monitor do
         FakeWeb.register_uri(:get, url, body: '', status: 404)
 
         expect(SimpleHttpMonitor::Mailer).to receive(:send_failure_notification)
-        subject.check
-        subject.check
+        2.times { subject.check }
+      end
+      describe 'if site becomes available' do
+        it 'sends notification, if failure notification already been sent' do
+           FakeWeb.register_uri(:get, url,
+                                 [{body: '', status: 404},
+                                  {body: '', status: 404},
+                                  {body: '', status: 200}
+                                 ]
+                               )
+         expect(SimpleHttpMonitor::Mailer).to receive(:send_back_online_notification)
+         3.times { subject.check }
+       end
+       context 'not sends notification if' do
+         before do
+           FakeWeb.register_uri(:get, url,
+                                [{body: '', status: 404},
+                                 {body: '', status: 200}
+                                ]
+                              )
+           expect(SimpleHttpMonitor::Mailer).to_not receive(:send_back_online_notification)
+         end
+         it 'nothing was sent' do
+           2.times { subject.check }
+         end
+         it 'back online notification was sent' do
+           3.times { subject.check }
+         end
+       end
       end
     end
   end
