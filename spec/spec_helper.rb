@@ -3,6 +3,10 @@ require 'bundler/setup'
 Bundler.require :default
 Bundler.require :development
 
+require 'json'
+require 'coveralls'
+Coveralls.wear!
+
 STORE_DIR = '/tmp/test_simple_http_monitor'
 
 RSpec.configure do |config|
